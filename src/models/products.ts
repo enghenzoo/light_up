@@ -14,6 +14,13 @@ export async function getProductBySlug(slug: string) {
   return await db.select().from(products).where(eq(products.slug, slug)).get();
 }
 
+export async function getProductByCategory(category: number) {
+  return await db
+    .select()
+    .from(products)
+    .where(eq(products.categoryId, category));
+}
+
 export async function updateProduct(
   id: number,
   data: Partial<typeof products.$inferInsert>

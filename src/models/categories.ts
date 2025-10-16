@@ -3,7 +3,7 @@ import { products_category } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 export async function createCategory(name: string) {
-  return await db.insert(products_category).values({ name }).returning();
+  return await db.insert(products_category).values({ name });
 }
 
 export async function getAllCategories() {
