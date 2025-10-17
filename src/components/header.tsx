@@ -13,7 +13,7 @@ export function Header() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <div className="text-xl font-serif font-semibold tracking-tight">Natura Beauty</div>
+          <div className="text-xl font-serif font-semibold tracking-tight">Light Up</div>
         </Link>
 
         {/* Desktop Navigation */}

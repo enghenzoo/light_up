@@ -16,10 +16,10 @@ export default function HomePage() {
       <section className="container mx-auto px-4 py-16 md:py-24">
         <div className="max-w-3xl mx-auto text-center space-y-6">
           <h1 className="font-serif text-4xl md:text-6xl font-bold text-balance leading-tight">
-            Natural Beauty, Naturally Yours
+            Light Up ,Light up Your Beauty
           </h1>
           <p className="text-lg text-muted-foreground text-pretty">
-            Discover our collection of premium skincare products crafted with natural ingredients for your daily beauty
+            Discover our collection of premium Makeup, skincare products crafted with natural ingredients for your daily beauty
             ritual
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
