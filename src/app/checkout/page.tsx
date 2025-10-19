@@ -1,51 +1,57 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { Header } from "@/components/header"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { products } from "@/lib/products"
-import { ArrowLeft, CreditCard, Truck, Package, CheckCircle2 } from "lucide-react"
-import Image from "next/image"
-import Link from "next/link"
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { products } from "@/lib/products";
+import {
+  ArrowLeft,
+  CreditCard,
+  Truck,
+  Package,
+  CheckCircle2,
+} from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function CheckoutPage() {
-  const router = useRouter()
-  const [isProcessing, setIsProcessing] = useState(false)
-  const [shippingMethod, setShippingMethod] = useState("standard")
-  const [paymentMethod, setPaymentMethod] = useState("card")
+  const router = useRouter();
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [shippingMethod, setShippingMethod] = useState("standard");
+  const [paymentMethod, setPaymentMethod] = useState("card");
 
   // Sample cart items
   const cartItems = [
     { ...products[0], quantity: 2 },
     { ...products[4], quantity: 1 },
     { ...products[2], quantity: 1 },
-  ]
+  ];
 
-  const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
-  const shipping = shippingMethod === "express" ? 9.99 : 4.99
-  const tax = subtotal * 0.1
-  const total = subtotal + shipping + tax
+  const subtotal = cartItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+  const shipping = shippingMethod === "express" ? 9.99 : 4.99;
+  const tax = subtotal * 0.1;
+  const total = subtotal + shipping + tax;
 
   const handlePlaceOrder = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsProcessing(true)
+    e.preventDefault();
+    setIsProcessing(true);
     // Simulate order processing
     setTimeout(() => {
-      setIsProcessing(false)
-      router.push("/order-confirmation")
-    }, 2000)
-  }
+      setIsProcessing(false);
+      router.push("/order-confirmation");
+    }, 2000);
+  };
 
   return (
     <div className="min-h-screen">
-      <Header />
-
       <div className="container mx-auto px-4 py-8">
         {/* Back Button */}
         <Button variant="ghost" size="sm" className="mb-6 -ml-2" asChild>
@@ -67,7 +73,9 @@ export default function CheckoutPage() {
                   <div className="h-10 w-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-semibold">
                     1
                   </div>
-                  <h2 className="font-serif text-xl font-bold">Shipping Information</h2>
+                  <h2 className="font-serif text-xl font-bold">
+                    Shipping Information
+                  </h2>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-4">
@@ -83,12 +91,22 @@ export default function CheckoutPage() {
 
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" required className="rounded-full" />
+                  <Input
+                    id="email"
+                    type="email"
+                    required
+                    className="rounded-full"
+                  />
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="phone">Phone Number</Label>
-                  <Input id="phone" type="tel" required className="rounded-full" />
+                  <Input
+                    id="phone"
+                    type="tel"
+                    required
+                    className="rounded-full"
+                  />
                 </div>
 
                 <div className="space-y-2">
@@ -118,10 +136,15 @@ export default function CheckoutPage() {
                   <div className="h-10 w-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-semibold">
                     2
                   </div>
-                  <h2 className="font-serif text-xl font-bold">Shipping Method</h2>
+                  <h2 className="font-serif text-xl font-bold">
+                    Shipping Method
+                  </h2>
                 </div>
 
-                <RadioGroup value={shippingMethod} onValueChange={setShippingMethod}>
+                <RadioGroup
+                  value={shippingMethod}
+                  onValueChange={setShippingMethod}
+                >
                   <div className="flex items-center justify-between p-4 border border-border rounded-2xl">
                     <div className="flex items-center gap-3">
                       <RadioGroupItem value="standard" id="standard" />
@@ -130,7 +153,9 @@ export default function CheckoutPage() {
                           <Truck className="h-5 w-5" />
                           <div>
                             <p className="font-medium">Standard Shipping</p>
-                            <p className="text-sm text-muted-foreground">5-7 business days</p>
+                            <p className="text-sm text-muted-foreground">
+                              5-7 business days
+                            </p>
                           </div>
                         </div>
                       </Label>
@@ -146,7 +171,9 @@ export default function CheckoutPage() {
                           <Package className="h-5 w-5" />
                           <div>
                             <p className="font-medium">Express Shipping</p>
-                            <p className="text-sm text-muted-foreground">2-3 business days</p>
+                            <p className="text-sm text-muted-foreground">
+                              2-3 business days
+                            </p>
                           </div>
                         </div>
                       </Label>
@@ -162,13 +189,21 @@ export default function CheckoutPage() {
                   <div className="h-10 w-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-semibold">
                     3
                   </div>
-                  <h2 className="font-serif text-xl font-bold">Payment Method</h2>
+                  <h2 className="font-serif text-xl font-bold">
+                    Payment Method
+                  </h2>
                 </div>
 
-                <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod}>
+                <RadioGroup
+                  value={paymentMethod}
+                  onValueChange={setPaymentMethod}
+                >
                   <div className="flex items-center gap-3 p-4 border border-border rounded-2xl">
                     <RadioGroupItem value="card" id="card" />
-                    <Label htmlFor="card" className="cursor-pointer flex items-center gap-2">
+                    <Label
+                      htmlFor="card"
+                      className="cursor-pointer flex items-center gap-2"
+                    >
                       <CreditCard className="h-5 w-5" />
                       <span className="font-medium">Credit / Debit Card</span>
                     </Label>
@@ -179,17 +214,32 @@ export default function CheckoutPage() {
                   <div className="space-y-4 pt-2">
                     <div className="space-y-2">
                       <Label htmlFor="cardNumber">Card Number</Label>
-                      <Input id="cardNumber" placeholder="1234 5678 9012 3456" required className="rounded-full" />
+                      <Input
+                        id="cardNumber"
+                        placeholder="1234 5678 9012 3456"
+                        required
+                        className="rounded-full"
+                      />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="expiry">Expiry Date</Label>
-                        <Input id="expiry" placeholder="MM/YY" required className="rounded-full" />
+                        <Input
+                          id="expiry"
+                          placeholder="MM/YY"
+                          required
+                          className="rounded-full"
+                        />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="cvv">CVV</Label>
-                        <Input id="cvv" placeholder="123" required className="rounded-full" />
+                        <Input
+                          id="cvv"
+                          placeholder="123"
+                          required
+                          className="rounded-full"
+                        />
                       </div>
                     </div>
 
@@ -202,8 +252,15 @@ export default function CheckoutPage() {
               </div>
 
               {/* Place Order Button - Mobile */}
-              <Button type="submit" size="lg" className="w-full rounded-full lg:hidden" disabled={isProcessing}>
-                {isProcessing ? "Processing..." : `Place Order - $${total.toFixed(2)}`}
+              <Button
+                type="submit"
+                size="lg"
+                className="w-full rounded-full lg:hidden"
+                disabled={isProcessing}
+              >
+                {isProcessing
+                  ? "Processing..."
+                  : `Place Order - $${total.toFixed(2)}`}
               </Button>
             </form>
           </div>
@@ -218,12 +275,23 @@ export default function CheckoutPage() {
                 {cartItems.map((item) => (
                   <div key={item.id} className="flex gap-3">
                     <div className="relative h-16 w-16 shrink-0 rounded-xl overflow-hidden bg-secondary">
-                      <Image src={item.image || "/placeholder.svg"} alt={item.name} fill className="object-cover" />
+                      <Image
+                        src={item.image || "/placeholder.svg"}
+                        alt={item.name}
+                        fill
+                        className="object-cover"
+                      />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-medium text-sm leading-tight truncate">{item.name}</p>
-                      <p className="text-xs text-muted-foreground">Qty: {item.quantity}</p>
-                      <p className="text-sm font-semibold">${(item.price * item.quantity).toFixed(2)}</p>
+                      <p className="font-medium text-sm leading-tight truncate">
+                        {item.name}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        Qty: {item.quantity}
+                      </p>
+                      <p className="text-sm font-semibold">
+                        ${(item.price * item.quantity).toFixed(2)}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -272,5 +340,5 @@ export default function CheckoutPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

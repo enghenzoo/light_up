@@ -1,9 +1,22 @@
 import { NextResponse } from "next/server";
-import { createProduct, getAllProducts } from "@/models/products";
+import {
+  createProduct,
+  getAllProducts,
+  getLatestProducts,
+} from "@/models/products";
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
-    const data = await getAllProducts();
+    const { searchParams } = new URL(req.url);
+    const latest = searchParams.get("latest");
+    let data;
+
+    if (!latest) {
+      data = await getAllProducts();
+      return NextResponse.json(data);
+    }
+
+    data = await getLatestProducts();
     return NextResponse.json(data);
   } catch (error) {
     console.error(error);

@@ -10,6 +10,10 @@ export async function getAllProducts() {
   return await db.select().from(products).all();
 }
 
+export async function getLatestProducts() {
+  return await db.select().from(products).limit(4).all();
+}
+
 export async function getProductBySlug(slug: string) {
   return await db.select().from(products).where(eq(products.slug, slug)).get();
 }

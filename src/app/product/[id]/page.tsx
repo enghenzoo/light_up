@@ -1,23 +1,29 @@
-"use client"
+"use client";
 
-import { Header } from "@/components/header"
-import { Button } from "@/components/ui/button"
-import { products } from "@/lib/products"
-import { ArrowLeft, Minus, Plus, Star, Leaf, Droplets, Sparkles } from "lucide-react"
-import Image from "next/image"
-import Link from "next/link"
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { Button } from "@/components/ui/button";
+import { products } from "@/lib/products";
+import {
+  ArrowLeft,
+  Minus,
+  Plus,
+  Star,
+  Leaf,
+  Droplets,
+  Sparkles,
+} from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function ProductPage({ params }: { params: { id: string } }) {
-  const router = useRouter()
-  const product = products.find((p) => p.id === params.id)
-  const [quantity, setQuantity] = useState(1)
+  const router = useRouter();
+  const product = products.find((p) => p.id === params.id);
+  const [quantity, setQuantity] = useState(1);
 
   if (!product) {
     return (
       <div className="min-h-screen">
-        <Header />
         <div className="container mx-auto px-4 py-16 text-center">
           <h1 className="text-2xl font-bold mb-4">Product not found</h1>
           <Button asChild>
@@ -25,18 +31,16 @@ export default function ProductPage({ params }: { params: { id: string } }) {
           </Button>
         </div>
       </div>
-    )
+    );
   }
 
   const handleAddToCart = () => {
     // Add to cart logic here
-    router.push("/cart")
-  }
+    router.push("/cart");
+  };
 
   return (
     <div className="min-h-screen">
-      <Header />
-
       <div className="container mx-auto px-4 py-8">
         {/* Back Button */}
         <Button variant="ghost" size="sm" className="mb-6 -ml-2" asChild>
@@ -50,7 +54,12 @@ export default function ProductPage({ params }: { params: { id: string } }) {
           {/* Product Image */}
           <div className="space-y-4">
             <div className="relative aspect-square rounded-3xl overflow-hidden bg-secondary">
-              <Image src={product.image || "/placeholder.svg"} alt={product.name} fill className="object-cover" />
+              <Image
+                src={product.image || "/placeholder.svg"}
+                alt={product.name}
+                fill
+                className="object-cover"
+              />
             </div>
 
             {/* Feature Icons */}
@@ -79,9 +88,15 @@ export default function ProductPage({ params }: { params: { id: string } }) {
           {/* Product Info */}
           <div className="space-y-6">
             <div>
-              <p className="text-sm text-muted-foreground mb-2">{product.category}</p>
-              <h1 className="font-serif text-4xl font-bold mb-2">{product.name}</h1>
-              <p className="text-sm text-muted-foreground">Size: {product.size}</p>
+              <p className="text-sm text-muted-foreground mb-2">
+                {product.category}
+              </p>
+              <h1 className="font-serif text-4xl font-bold mb-2">
+                {product.name}
+              </h1>
+              <p className="text-sm text-muted-foreground">
+                Size: {product.size}
+              </p>
             </div>
 
             {/* Rating */}
@@ -91,27 +106,38 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                   <Star
                     key={i}
                     className={`h-4 w-4 ${
-                      i < Math.floor(product.rating) ? "fill-foreground text-foreground" : "text-muted-foreground"
+                      i < Math.floor(product.rating)
+                        ? "fill-foreground text-foreground"
+                        : "text-muted-foreground"
                     }`}
                   />
                 ))}
               </div>
               <span className="text-sm font-medium">{product.rating}</span>
-              <span className="text-sm text-muted-foreground">({product.reviews} Reviews)</span>
+              <span className="text-sm text-muted-foreground">
+                ({product.reviews} Reviews)
+              </span>
             </div>
 
             {/* Price */}
-            <div className="text-3xl font-bold">${product.price.toFixed(2)}</div>
+            <div className="text-3xl font-bold">
+              ${product.price.toFixed(2)}
+            </div>
 
             {/* Description */}
-            <p className="text-muted-foreground leading-relaxed">{product.description}</p>
+            <p className="text-muted-foreground leading-relaxed">
+              {product.description}
+            </p>
 
             {/* Benefits */}
             <div>
               <h3 className="font-semibold mb-3">Key Benefits</h3>
               <div className="flex flex-wrap gap-2">
                 {product.benefits.map((benefit) => (
-                  <span key={benefit} className="px-4 py-2 bg-secondary rounded-full text-sm">
+                  <span
+                    key={benefit}
+                    className="px-4 py-2 bg-secondary rounded-full text-sm"
+                  >
                     {benefit}
                   </span>
                 ))}
@@ -123,7 +149,10 @@ export default function ProductPage({ params }: { params: { id: string } }) {
               <h3 className="font-semibold mb-3">Key Ingredients</h3>
               <div className="flex flex-wrap gap-2">
                 {product.ingredients.map((ingredient) => (
-                  <span key={ingredient} className="px-4 py-2 border border-border rounded-full text-sm">
+                  <span
+                    key={ingredient}
+                    className="px-4 py-2 border border-border rounded-full text-sm"
+                  >
                     {ingredient}
                   </span>
                 ))}
@@ -155,7 +184,11 @@ export default function ProductPage({ params }: { params: { id: string } }) {
             </div>
 
             {/* Add to Cart Button */}
-            <Button size="lg" className="w-full rounded-full" onClick={handleAddToCart}>
+            <Button
+              size="lg"
+              className="w-full rounded-full"
+              onClick={handleAddToCart}
+            >
               Add to Cart
             </Button>
           </div>
@@ -163,13 +196,21 @@ export default function ProductPage({ params }: { params: { id: string } }) {
 
         {/* Related Products */}
         <div className="mt-16">
-          <h2 className="font-serif text-2xl font-bold mb-6">You May Also Like</h2>
+          <h2 className="font-serif text-2xl font-bold mb-6">
+            You May Also Like
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {products
-              .filter((p) => p.id !== product.id && p.category === product.category)
+              .filter(
+                (p) => p.id !== product.id && p.category === product.category
+              )
               .slice(0, 4)
               .map((relatedProduct) => (
-                <Link key={relatedProduct.id} href={`/product/${relatedProduct.id}`} className="group">
+                <Link
+                  key={relatedProduct.id}
+                  href={`/product/${relatedProduct.id}`}
+                  className="group"
+                >
                   <div className="bg-card rounded-3xl p-4 shadow-sm hover:shadow-md transition-shadow">
                     <div className="relative aspect-square mb-4 rounded-2xl overflow-hidden bg-secondary">
                       <Image
@@ -181,10 +222,16 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                     </div>
                     <div className="space-y-2">
                       <div>
-                        <p className="text-xs text-muted-foreground">{relatedProduct.category}</p>
-                        <h3 className="font-medium text-sm leading-tight">{relatedProduct.name}</h3>
+                        <p className="text-xs text-muted-foreground">
+                          {relatedProduct.category}
+                        </p>
+                        <h3 className="font-medium text-sm leading-tight">
+                          {relatedProduct.name}
+                        </h3>
                       </div>
-                      <span className="font-semibold">${relatedProduct.price.toFixed(2)}</span>
+                      <span className="font-semibold">
+                        ${relatedProduct.price.toFixed(2)}
+                      </span>
                     </div>
                   </div>
                 </Link>
@@ -193,5 +240,5 @@ export default function ProductPage({ params }: { params: { id: string } }) {
         </div>
       </div>
     </div>
-  )
+  );
 }

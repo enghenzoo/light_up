@@ -1,57 +1,64 @@
-"use client"
+"use client";
 
-import { Header } from "@/components/header"
-import { ProductCard } from "@/components/product-card"
-import { products, categories } from "@/lib/products"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Search, SlidersHorizontal, X } from "lucide-react"
-import { useState } from "react"
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Slider } from "@/components/ui/slider"
+import { ProductCard } from "@/components/product-card";
+import { products, categories } from "@/lib/products";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Search, SlidersHorizontal, X } from "lucide-react";
+import { useState } from "react";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Slider } from "@/components/ui/slider";
 
 export default function SearchPage() {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("All Products")
-  const [priceRange, setPriceRange] = useState([0, 50])
-  const [sortBy, setSortBy] = useState("featured")
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All Products");
+  const [priceRange, setPriceRange] = useState([0, 50]);
+  const [sortBy, setSortBy] = useState("featured");
 
   // Filter products
   const filteredProducts = products.filter((product) => {
     const matchesSearch =
       product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.category.toLowerCase().includes(searchQuery.toLowerCase())
-    const matchesCategory = selectedCategory === "All Products" || product.category === selectedCategory
-    const matchesPrice = product.price >= priceRange[0] && product.price <= priceRange[1]
-    return matchesSearch && matchesCategory && matchesPrice
-  })
+      product.category.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory =
+      selectedCategory === "All Products" ||
+      product.category === selectedCategory;
+    const matchesPrice =
+      product.price >= priceRange[0] && product.price <= priceRange[1];
+    return matchesSearch && matchesCategory && matchesPrice;
+  });
 
   // Sort products
   const sortedProducts = [...filteredProducts].sort((a, b) => {
     switch (sortBy) {
       case "price-low":
-        return a.price - b.price
+        return a.price - b.price;
       case "price-high":
-        return b.price - a.price
+        return b.price - a.price;
       case "name":
-        return a.name.localeCompare(b.name)
+        return a.name.localeCompare(b.name);
       default:
-        return 0
+        return 0;
     }
-  })
+  });
 
   const clearFilters = () => {
-    setSelectedCategory("All Products")
-    setPriceRange([0, 50])
-    setSortBy("featured")
-  }
+    setSelectedCategory("All Products");
+    setPriceRange([0, 50]);
+    setSortBy("featured");
+  };
 
   return (
     <div className="min-h-screen">
-      <Header />
-
       <div className="container mx-auto px-4 py-8">
         {/* Search Header */}
         <div className="mb-8 space-y-4">
@@ -83,14 +90,20 @@ export default function SearchPage() {
             {/* Mobile Filter Button */}
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="outline" size="icon" className="h-12 w-12 rounded-full md:hidden bg-transparent">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="h-12 w-12 rounded-full md:hidden bg-transparent"
+                >
                   <SlidersHorizontal className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
               <SheetContent>
                 <SheetHeader>
                   <SheetTitle>Filters</SheetTitle>
-                  <SheetDescription>Refine your product search</SheetDescription>
+                  <SheetDescription>
+                    Refine your product search
+                  </SheetDescription>
                 </SheetHeader>
                 <FilterContent
                   selectedCategory={selectedCategory}
@@ -132,7 +145,11 @@ export default function SearchPage() {
           <div className="flex-1">
             <div className="mb-6">
               <p className="text-muted-foreground">
-                Found <span className="font-semibold text-foreground">{sortedProducts.length}</span> results
+                Found{" "}
+                <span className="font-semibold text-foreground">
+                  {sortedProducts.length}
+                </span>{" "}
+                results
               </p>
             </div>
 
@@ -144,14 +161,16 @@ export default function SearchPage() {
               </div>
             ) : (
               <div className="text-center py-16">
-                <p className="text-muted-foreground">No products found. Try adjusting your filters.</p>
+                <p className="text-muted-foreground">
+                  No products found. Try adjusting your filters.
+                </p>
               </div>
             )}
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function FilterContent({
@@ -163,20 +182,23 @@ function FilterContent({
   setSortBy,
   clearFilters,
 }: {
-  selectedCategory: string
-  setSelectedCategory: (value: string) => void
-  priceRange: number[]
-  setPriceRange: (value: number[]) => void
-  sortBy: string
-  setSortBy: (value: string) => void
-  clearFilters: () => void
+  selectedCategory: string;
+  setSelectedCategory: (value: string) => void;
+  priceRange: number[];
+  setPriceRange: (value: number[]) => void;
+  sortBy: string;
+  setSortBy: (value: string) => void;
+  clearFilters: () => void;
 }) {
   return (
     <div className="space-y-6 pt-6">
       {/* Category Filter */}
       <div className="space-y-3">
         <Label className="text-sm font-semibold">Category</Label>
-        <RadioGroup value={selectedCategory} onValueChange={setSelectedCategory}>
+        <RadioGroup
+          value={selectedCategory}
+          onValueChange={setSelectedCategory}
+        >
           {categories.map((category) => (
             <div key={category} className="flex items-center space-x-2">
               <RadioGroupItem value={category} id={category} />
@@ -192,7 +214,13 @@ function FilterContent({
       <div className="space-y-3">
         <Label className="text-sm font-semibold">Price Range</Label>
         <div className="pt-2">
-          <Slider value={priceRange} onValueChange={setPriceRange} max={50} step={1} className="w-full" />
+          <Slider
+            value={priceRange}
+            onValueChange={setPriceRange}
+            max={50}
+            step={1}
+            className="w-full"
+          />
           <div className="flex items-center justify-between mt-2 text-sm text-muted-foreground">
             <span>${priceRange[0]}</span>
             <span>${priceRange[1]}</span>
@@ -231,5 +259,5 @@ function FilterContent({
         </RadioGroup>
       </div>
     </div>
-  )
+  );
 }

@@ -1,21 +1,21 @@
-import { Header } from "@/components/header"
-import { Button } from "@/components/ui/button"
-import { CheckCircle2, Package, Truck, Mail } from "lucide-react"
-import Link from "next/link"
+n";
+import { CheckCircle2, Package, Truck, Mail } from "lucide-react";
+import Link from "next/link";
 
 export default function OrderConfirmationPage() {
-  const orderNumber = "ORD-" + Math.random().toString(36).substr(2, 9).toUpperCase()
-  const estimatedDelivery = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString("en-US", {
+  const orderNumber =
+    "ORD-" + Math.random().toString(36).substr(2, 9).toUpperCase();
+  const estimatedDelivery = new Date(
+    Date.now() + 7 * 24 * 60 * 60 * 1000
+  ).toLocaleDateString("en-US", {
     weekday: "long",
     year: "numeric",
     month: "long",
     day: "numeric",
-  })
+  });
 
   return (
     <div className="min-h-screen">
-      <Header />
-
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-2xl mx-auto text-center space-y-8">
           {/* Success Icon */}
@@ -27,7 +27,8 @@ export default function OrderConfirmationPage() {
           <div className="space-y-3">
             <h1 className="font-serif text-4xl font-bold">Order Confirmed!</h1>
             <p className="text-lg text-muted-foreground">
-              Thank you for your purchase. Your order has been successfully placed.
+              Thank you for your purchase. Your order has been successfully
+              placed.
             </p>
           </div>
 
@@ -57,7 +58,9 @@ export default function OrderConfirmationPage() {
                 </div>
                 <div>
                   <p className="font-medium">Order Processing</p>
-                  <p className="text-sm text-muted-foreground">Your order is being prepared for shipment</p>
+                  <p className="text-sm text-muted-foreground">
+                    Your order is being prepared for shipment
+                  </p>
                 </div>
               </div>
 
@@ -67,7 +70,9 @@ export default function OrderConfirmationPage() {
                 </div>
                 <div>
                   <p className="font-medium">Estimated Delivery</p>
-                  <p className="text-sm text-muted-foreground">{estimatedDelivery}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {estimatedDelivery}
+                  </p>
                 </div>
               </div>
             </div>
@@ -78,12 +83,17 @@ export default function OrderConfirmationPage() {
             <Button size="lg" className="rounded-full" asChild>
               <Link href="/products">Continue Shopping</Link>
             </Button>
-            <Button size="lg" variant="outline" className="rounded-full bg-transparent" asChild>
+            <Button
+              size="lg"
+              variant="outline"
+              className="rounded-full bg-transparent"
+              asChild
+            >
               <Link href="/">Back to Home</Link>
             </Button>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
