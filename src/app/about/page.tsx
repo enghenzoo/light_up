@@ -1,4 +1,3 @@
-import { Header } from "@/components/header"
 import { Button } from "@/components/ui/button"
 import { Leaf, Heart, Sparkles, Award, Users, Globe } from "lucide-react"
 import Link from "next/link"
@@ -6,7 +5,6 @@ import Link from "next/link"
 export default function AboutPage() {
   return (
     <div className="min-h-screen">
-      <Header />
 
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-16 md:py-24">

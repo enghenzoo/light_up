@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
-export async function CategoryPage() {
+export default async function CategoryPage() {
   const categories = [
     {
       slug: "cleansers",
