@@ -1,4 +1,4 @@
-n";
+import { Button } from "@/components/ui/button";
 import { CheckCircle2, Package, Truck, Mail } from "lucide-react";
 import Link from "next/link";
 
