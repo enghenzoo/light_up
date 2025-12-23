@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import {
   getProductBySlug,
   updateProduct,
@@ -6,11 +6,12 @@ import {
 } from "@/models/products";
 
 export async function GET(
-  _req: Request,
-  { params }: { params: { slug: string } }
+  _req: NextRequest,
+  ctx: RouteContext<"/api/products/[id]">
 ) {
   try {
-    const product = await getProductBySlug(params.slug);
+    const { id } = await ctx.params;
+    const product = await getProductBySlug(id);
     if (!product) {
       return NextResponse.json({ error: "Product not found" }, { status: 404 });
     }
@@ -26,11 +27,12 @@ export async function GET(
 
 export async function PUT(
   req: Request,
-  { params }: { params: { id: string } }
+  ctx: RouteContext<"/api/products/[id]">
 ) {
   try {
+    const { id } = await ctx.params;
     const body = await req.json();
-    const updated = await updateProduct(Number(params.id), body);
+    const updated = await updateProduct(Number(id), body);
     return NextResponse.json(updated);
   } catch (error) {
     console.error(error);

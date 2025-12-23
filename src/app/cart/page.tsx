@@ -2,53 +2,33 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { products } from "@/lib/products";
 import { ArrowLeft, Minus, Plus, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-
-interface CartItem {
-  id: string;
-  quantity: number;
-}
+import { useCartStore } from "@/store/cartStore";
 
 export default function CartPage() {
   const router = useRouter();
-  const [cartItems, setCartItems] = useState<CartItem[]>([
-    { id: "1", quantity: 2 },
-    { id: "5", quantity: 1 },
-    { id: "3", quantity: 1 },
-  ]);
+  const { cart, removeFromCart, updateQuantity } = useCartStore();
   const [promoCode, setPromoCode] = useState("");
+  const [isClient, setIsClient] = useState(false);
 
-  const cartProducts = cartItems
-    .map((item) => ({
-      ...products.find((p) => p.id === item.id)!,
-      quantity: item.quantity,
-    }))
-    .filter((item) => item.id);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
-  const subtotal = cartProducts.reduce(
+  // Avoid SSR mismatch by rendering only after hydration
+  if (!isClient) return null;
+
+  const subtotal = cart.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
   const shipping = 4.99;
   const total = subtotal + shipping;
 
-  const updateQuantity = (id: string, newQuantity: number) => {
-    if (newQuantity < 1) return;
-    setCartItems(
-      cartItems.map((item) =>
-        item.id === id ? { ...item, quantity: newQuantity } : item
-      )
-    );
-  };
-
-  const removeItem = (id: string) => {
-    setCartItems(cartItems.filter((item) => item.id !== id));
-  };
   const handleCheckout = () => {
     router.push("/checkout");
   };
@@ -64,7 +44,7 @@ export default function CartPage() {
           </Link>
         </Button>
 
-        {cartItems.length === 0 ? (
+        {cart.length === 0 ? (
           <div className="text-center py-16">
             <h1 className="font-serif text-3xl font-bold mb-4">
               Your cart is empty
@@ -83,7 +63,7 @@ export default function CartPage() {
               <h1 className="font-serif text-3xl font-bold">Shopping Bag</h1>
 
               <div className="space-y-4">
-                {cartProducts.map((item) => (
+                {cart.map((item) => (
                   <div
                     key={item.id}
                     className="bg-card rounded-3xl p-4 shadow-sm"
@@ -107,14 +87,14 @@ export default function CartPage() {
                               {item.name}
                             </h3>
                             <p className="text-xs text-muted-foreground">
-                              {item.category}
+                              ${item.price.toFixed(2)}
                             </p>
                           </div>
                           <Button
                             variant="ghost"
                             size="icon"
                             className="h-8 w-8 shrink-0"
-                            onClick={() => removeItem(item.id)}
+                            onClick={() => removeFromCart(item.id)}
                           >
                             <X className="h-4 w-4" />
                           </Button>
@@ -134,6 +114,7 @@ export default function CartPage() {
                               onClick={() =>
                                 updateQuantity(item.id, item.quantity - 1)
                               }
+                              disabled={item.quantity <= 1}
                             >
                               <Minus className="h-3 w-3" />
                             </Button>
@@ -200,7 +181,7 @@ export default function CartPage() {
                   <span className="font-semibold">Bag Total</span>
                   <div className="text-right">
                     <span className="text-xs text-muted-foreground block">
-                      {cartItems.length} items
+                      {cart.length} items
                     </span>
                     <span className="text-2xl font-bold">
                       ${total.toFixed(2)}

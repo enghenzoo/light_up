@@ -1,15 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/product-card";
-import { products } from "@/lib/products";
+
 import { ArrowRight, Leaf, Sparkles, Heart } from "lucide-react";
 import Link from "next/link";
 
-export default function HomePage() {
-  const featuredProducts = products.slice(0, 4);
+import { getLatestProducts } from "@/models/products";
+
+export default async function HomePage() {
+  const latestproducts = await getLatestProducts();
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
       <section className="container mx-auto px-4 py-16 md:py-24">
         <div className="max-w-3xl mx-auto text-center space-y-6">
           <h1 className="font-serif text-4xl md:text-6xl font-bold text-balance leading-tight">
@@ -83,7 +84,7 @@ export default function HomePage() {
           </Button>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {featuredProducts.map((product) => (
+          {latestproducts.map((product: any) => (
             <ProductCard key={product.id} {...product} />
           ))}
         </div>

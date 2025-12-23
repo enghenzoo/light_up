@@ -22,6 +22,7 @@ export const admins = sqliteTable("admins", {
 export const products_category = sqliteTable("categories", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull().unique(),
+  description: text("description"),
   image: text("image"),
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
 });

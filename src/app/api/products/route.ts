@@ -9,14 +9,25 @@ export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const latest = searchParams.get("latest");
+    const limit = searchParams.get("limit");
+    const offset = searchParams.get("offset");
+    const categoryId = searchParams.get("categoryId");
+    const minPrice = searchParams.get("minPrice");
+    const maxPrice = searchParams.get("maxPrice");
+
     let data;
 
-    if (!latest) {
-      data = await getAllProducts();
-      return NextResponse.json(data);
+    if (latest) {
+      data = await getLatestProducts();
+    } else {
+      data = await getAllProducts(
+        limit ? Number(limit) : undefined,
+        offset ? Number(offset) : undefined,
+        categoryId ? Number(categoryId) : undefined,
+        minPrice ? Number(minPrice) : undefined,
+        maxPrice ? Number(maxPrice) : undefined
+      );
     }
-
-    data = await getLatestProducts();
     return NextResponse.json(data);
   } catch (error) {
     console.error(error);

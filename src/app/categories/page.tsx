@@ -1,45 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { getAllCategories } from "@/models/categories";
 
 export default async function CategoryPage() {
-  const categories = [
-    {
-      slug: "cleansers",
-      name: "Cleansers",
-      description:
-        "Gentle cleansers that remove impurities while maintaining your skin's natural balance",
-      image: "/natural-facial-cleanser-bottle-with-eucalyptus.jpg",
-      productCount: 4,
-    },
-    {
-      slug: "moisturizers",
-      name: "Moisturizers",
-      description:
-        "Hydrating formulas that nourish and protect your skin throughout the day",
-      image: "/natural-moisturizer-bottle-minimal.jpg",
-      productCount: 3,
-    },
-    {
-      slug: "serums",
-      name: "Serums",
-      description:
-        "Concentrated treatments targeting specific skin concerns with powerful active ingredients",
-      image: "/night-serum-dropper-bottle.jpg",
-      productCount: 2,
-    },
-    {
-      slug: "treatments",
-      name: "Treatments",
-      description:
-        "Specialized products for targeted skincare solutions and intensive care",
-      image: "/eye-cream-jar-minimal.jpg",
-      productCount: 3,
-    },
-  ];
+  const categories = await getAllCategories();
+
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
       <section className="container mx-auto px-4 py-16 md:py-24">
         <div className="max-w-3xl mx-auto text-center space-y-6">
           <h1 className="font-serif text-4xl md:text-6xl font-bold text-balance leading-tight">
@@ -52,13 +20,12 @@ export default async function CategoryPage() {
         </div>
       </section>
 
-      {/* Categories Grid */}
       <section className="container mx-auto px-4 pb-16">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {categories.map((category) => (
             <Link
-              key={category.slug}
-              href={`/category/${category.slug}`}
+              key={category.id}
+              href={`/category/${category.id}`}
               className="group relative overflow-hidden rounded-3xl bg-secondary hover:shadow-xl transition-all duration-300"
             >
               <div className="grid md:grid-cols-2 gap-6 p-8">
@@ -73,7 +40,7 @@ export default async function CategoryPage() {
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground">
-                      {category.productCount} Products
+                      {String(category.productCount)} Products
                     </span>
                     <Button
                       variant="ghost"

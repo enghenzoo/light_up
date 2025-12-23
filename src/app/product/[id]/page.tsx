@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { products } from "@/lib/products";
 import {
   ArrowLeft,
   Minus,
@@ -13,13 +12,58 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { useCartStore } from "@/store/cartStore";
 
-export default function ProductPage({ params }: { params: { id: string } }) {
+interface Product {
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+  price: number;
+  size?: string;
+  image: string;
+  rating: number;
+  reviews: number;
+  benefits: string[];
+  ingredients: string[];
+}
+
+export default function ProductPage() {
+  const params = useParams();
   const router = useRouter();
-  const product = products.find((p) => p.id === params.id);
+  const { addToCart } = useCartStore();
+
+  const [product, setProduct] = useState<Product | null>(null);
   const [quantity, setQuantity] = useState(1);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProductData = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch(`/api/products/${params.id}`);
+        if (!res.ok) throw new Error("Failed to fetch product");
+        const data: Product = await res.json();
+        setProduct(data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProductData();
+  }, [params.id]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-muted-foreground">Loading product...</p>
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -35,7 +79,13 @@ export default function ProductPage({ params }: { params: { id: string } }) {
   }
 
   const handleAddToCart = () => {
-    // Add to cart logic here
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      quantity,
+      image: product.image,
+    });
     router.push("/cart");
   };
 
@@ -64,24 +114,21 @@ export default function ProductPage({ params }: { params: { id: string } }) {
 
             {/* Feature Icons */}
             <div className="flex items-center justify-center gap-4">
-              <div className="flex flex-col items-center gap-2 p-4 bg-card rounded-2xl shadow-sm">
-                <div className="h-12 w-12 rounded-full bg-secondary flex items-center justify-center">
-                  <Leaf className="h-6 w-6" />
+              {[
+                { icon: Leaf, label: "Natural" },
+                { icon: Droplets, label: "Hydrating" },
+                { icon: Sparkles, label: "Gentle" },
+              ].map(({ icon: Icon, label }) => (
+                <div
+                  key={label}
+                  className="flex flex-col items-center gap-2 p-4 bg-card rounded-2xl shadow-sm"
+                >
+                  <div className="h-12 w-12 rounded-full bg-secondary flex items-center justify-center">
+                    <Icon className="h-6 w-6" />
+                  </div>
+                  <span className="text-xs text-center">{label}</span>
                 </div>
-                <span className="text-xs text-center">Natural</span>
-              </div>
-              <div className="flex flex-col items-center gap-2 p-4 bg-card rounded-2xl shadow-sm">
-                <div className="h-12 w-12 rounded-full bg-secondary flex items-center justify-center">
-                  <Droplets className="h-6 w-6" />
-                </div>
-                <span className="text-xs text-center">Hydrating</span>
-              </div>
-              <div className="flex flex-col items-center gap-2 p-4 bg-card rounded-2xl shadow-sm">
-                <div className="h-12 w-12 rounded-full bg-secondary flex items-center justify-center">
-                  <Sparkles className="h-6 w-6" />
-                </div>
-                <span className="text-xs text-center">Gentle</span>
-              </div>
+              ))}
             </div>
           </div>
 
@@ -94,9 +141,11 @@ export default function ProductPage({ params }: { params: { id: string } }) {
               <h1 className="font-serif text-4xl font-bold mb-2">
                 {product.name}
               </h1>
-              <p className="text-sm text-muted-foreground">
-                Size: {product.size}
-              </p>
+              {product.size && (
+                <p className="text-sm text-muted-foreground">
+                  Size: {product.size}
+                </p>
+              )}
             </div>
 
             {/* Rating */}
@@ -130,34 +179,38 @@ export default function ProductPage({ params }: { params: { id: string } }) {
             </p>
 
             {/* Benefits */}
-            <div>
-              <h3 className="font-semibold mb-3">Key Benefits</h3>
-              <div className="flex flex-wrap gap-2">
-                {product.benefits.map((benefit) => (
-                  <span
-                    key={benefit}
-                    className="px-4 py-2 bg-secondary rounded-full text-sm"
-                  >
-                    {benefit}
-                  </span>
-                ))}
+            {product.benefits?.length > 0 && (
+              <div>
+                <h3 className="font-semibold mb-3">Key Benefits</h3>
+                <div className="flex flex-wrap gap-2">
+                  {product.benefits.map((benefit) => (
+                    <span
+                      key={benefit}
+                      className="px-4 py-2 bg-secondary rounded-full text-sm"
+                    >
+                      {benefit}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Ingredients */}
-            <div>
-              <h3 className="font-semibold mb-3">Key Ingredients</h3>
-              <div className="flex flex-wrap gap-2">
-                {product.ingredients.map((ingredient) => (
-                  <span
-                    key={ingredient}
-                    className="px-4 py-2 border border-border rounded-full text-sm"
-                  >
-                    {ingredient}
-                  </span>
-                ))}
+            {product.ingredients?.length > 0 && (
+              <div>
+                <h3 className="font-semibold mb-3">Key Ingredients</h3>
+                <div className="flex flex-wrap gap-2">
+                  {product.ingredients.map((ingredient) => (
+                    <span
+                      key={ingredient}
+                      className="px-4 py-2 border border-border rounded-full text-sm"
+                    >
+                      {ingredient}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Quantity Selector */}
             <div className="flex items-center gap-4">
@@ -191,51 +244,6 @@ export default function ProductPage({ params }: { params: { id: string } }) {
             >
               Add to Cart
             </Button>
-          </div>
-        </div>
-
-        {/* Related Products */}
-        <div className="mt-16">
-          <h2 className="font-serif text-2xl font-bold mb-6">
-            You May Also Like
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {products
-              .filter(
-                (p) => p.id !== product.id && p.category === product.category
-              )
-              .slice(0, 4)
-              .map((relatedProduct) => (
-                <Link
-                  key={relatedProduct.id}
-                  href={`/product/${relatedProduct.id}`}
-                  className="group"
-                >
-                  <div className="bg-card rounded-3xl p-4 shadow-sm hover:shadow-md transition-shadow">
-                    <div className="relative aspect-square mb-4 rounded-2xl overflow-hidden bg-secondary">
-                      <Image
-                        src={relatedProduct.image || "/placeholder.svg"}
-                        alt={relatedProduct.name}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <div>
-                        <p className="text-xs text-muted-foreground">
-                          {relatedProduct.category}
-                        </p>
-                        <h3 className="font-medium text-sm leading-tight">
-                          {relatedProduct.name}
-                        </h3>
-                      </div>
-                      <span className="font-semibold">
-                        ${relatedProduct.price.toFixed(2)}
-                      </span>
-                    </div>
-                  </div>
-                </Link>
-              ))}
           </div>
         </div>
       </div>

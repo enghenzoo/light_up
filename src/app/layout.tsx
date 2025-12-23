@@ -1,11 +1,17 @@
 import type React from "react";
-import { Geist, Playfair_Display } from "next/font/google";
-import "./globals.css";
+import { Cairo, Geist, Playfair_Display } from "next/font/google";
+import "@/app/globals.css";
 import { Header } from "@/components/header";
 
 const geistSans = Geist({
   subsets: ["latin"],
   variable: "--font-geist-sans",
+});
+
+const cairo = Cairo({
+  subsets: ["latin"],
+  variable: "--font-cairo",
+  weight: ["400", "500", "600", "700"],
 });
 
 const playfair = Playfair_Display({
@@ -17,6 +23,44 @@ const playfair = Playfair_Display({
 export const metadata = {
   title: "Natura Beauty - Natural Skincare Products",
   description: "Premium natural skincare products for your daily routine",
+  viewport: "width=device-width, initial-scale=1",
+  authors: [
+    { name: "Mohanad Refaye", url: "https://github.com/enghenzoo" },
+    { name: "Ahmed Moftah", url: "https://github.com/AhmedFawzyMof" },
+  ],
+  keywords: [
+    "natural skincare",
+    "skincare",
+    "beauty",
+    "glowup",
+    "naturalskincare",
+    "organic",
+    "vegan",
+    "crueltyfree",
+    "sustainable",
+    "ecofriendly",
+    "greenbeauty",
+    "cleanbeauty",
+    "selfcare",
+    "wellness",
+    "healthyskin",
+    "radiantskin",
+    "skincareroutine",
+    "skincareproducts",
+    "facialcare",
+    "bodycare",
+    "haircare",
+    "makeup",
+    "cosmetics",
+    "beautyroutine",
+    "skincaretips",
+    "skincarecommunity",
+    "beautyblogger",
+    "skincareaddict",
+    "glowingskin",
+    "naturalingredients",
+    "holisticbeauty",
+  ],
 };
 
 export default function RootLayout({
@@ -27,7 +71,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${playfair.variable} antialiased`}
+      className={`${cairo.variable} ${geistSans.variable} antialiased`}
     >
       <body>
         <Header />
