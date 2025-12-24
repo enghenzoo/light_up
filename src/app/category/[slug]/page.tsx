@@ -1,48 +1,23 @@
 import { ProductCard } from "@/components/product-card";
-import { products } from "@/lib/products";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import {getProductByCategory} from "@/models/products";
+import { getCategoryById } from "@/models/categories";
 
-const categories = {
-  cleansers: {
-    name: "Cleansers",
-    description:
-      "Gentle cleansers that remove impurities while maintaining your skin's natural balance",
-    image: "/natural-facial-cleanser-bottle-with-eucalyptus.jpg",
-  },
-  moisturizers: {
-    name: "Moisturizers",
-    description:
-      "Hydrating formulas that nourish and protect your skin throughout the day",
-    image: "/natural-moisturizer-bottle-minimal.jpg",
-  },
-  serums: {
-    name: "Serums",
-    description:
-      "Concentrated treatments targeting specific skin concerns with powerful active ingredients",
-    image: "/night-serum-dropper-bottle.jpg",
-  },
-  treatments: {
-    name: "Treatments",
-    description:
-      "Specialized products for targeted skincare solutions and intensive care",
-    image: "/eye-cream-jar-minimal.jpg",
-  },
-};
-
-export default function CategoryPage({ params }: { params: { slug: string } }) {
-  const category = categories[params.slug as keyof typeof categories];
+export default async function CategoryPage({ params }: { params: { slug: string } }) {
+  const categoryParams = await params;
+  
+  const category = await getCategoryById(Number(categoryParams.slug))
+  console.log(category)
 
   if (!category) {
     notFound();
   }
 
-  const categoryProducts = products.filter(
-    (product) => product.category.toLowerCase() === params.slug
-  );
-
+  const categoryProducts = await getProductByCategory(String(categoryParams.slug));
+  
   return (
     <div className="min-h-screen">
       {/* Category Hero */}
@@ -72,7 +47,7 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
           </div>
           <div className="relative aspect-square rounded-3xl overflow-hidden bg-secondary">
             <img
-              src={category.image || "/placeholder.svg"}
+              src={category.image}
               alt={category.name}
               className="w-full h-full object-cover"
             />
@@ -104,32 +79,5 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
         )}
       </section>
 
-      {/* Browse Other Categories */}
-      <section className="container mx-auto px-4 pb-16">
-        <h2 className="font-serif text-2xl font-bold mb-8">
-          Browse Other Categories
-        </h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {Object.entries(categories)
-            .filter(([slug]) => slug !== params.slug)
-            .map(([slug, cat]) => (
-              <Link
-                key={slug}
-                href={`/category/${slug}`}
-                className="group relative aspect-square rounded-2xl overflow-hidden bg-secondary hover:shadow-lg transition-shadow"
-              >
-                <img
-                  src={cat.image || "/placeholder.svg"}
-                  alt={cat.name}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
-                  <h3 className="font-semibold text-white">{cat.name}</h3>
-                </div>
-              </Link>
-            ))}
-        </div>
-      </section>
     </div>
-  );
-}
+  );}

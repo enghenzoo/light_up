@@ -31,7 +31,7 @@ export default async function CategoryPage() {
               <div className="grid md:grid-cols-2 gap-6 p-8">
                 <div className="flex flex-col justify-between space-y-4">
                   <div className="space-y-3">
-                    <h2 className="font-serif text-3xl font-bold group-hover:text-primary transition-colors">
+                    <h2 className="font-serif text-3xl font-bold group-hover:text-white transition-colors">
                       {category.name}
                     </h2>
                     <p className="text-muted-foreground leading-relaxed">

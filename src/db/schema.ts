@@ -33,6 +33,7 @@ export const products = sqliteTable("products", {
   slug: text("slug").notNull().unique(),
   description: text("description"),
   imageUrl: text("image_url"),
+  images:text("images", {mode: "json"}),
   price: real("price").notNull(),
   categoryId: integer("category_id").references(() => products_category.id),
   stockQuantity: integer("stock_quantity").default(0),
@@ -87,12 +88,4 @@ export const payments = sqliteTable("payments", {
   status: text("status").default("pending"),
   transactionId: text("transaction_id"),
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
-});
-
-export const productImages = sqliteTable("product_images", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
-  productId: integer("product_id").references(() => products.id),
-  url: text("url").notNull(),
-  color: text("color"),
-  alt: text("alt"),
 });

@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { products_category } from "@/db/schema";
+import { products, products_category } from "@/db/schema";
 import { eq, sql } from "drizzle-orm";
 
 export async function createCategory(name: string) {
@@ -13,14 +13,16 @@ export async function getAllCategories() {
       name: products_category.name,
       description: products_category.description,
       image: products_category.image,
-      productCount: sql`(
-        SELECT COUNT(*)
-        FROM products
-        WHERE products.category_id = ${products_category.id}
-      )`,
+      productCount: sql<number>`count(${products.id})`,
     })
     .from(products_category)
+    .leftJoin(products, eq(products.categoryId,products_category.id))
+    .groupBy(products_category.id)
     .all();
+}
+
+export async function getCategoryById(categoryId: number) {
+  return await db.select().from(products_category).where(eq(products_category.id, categoryId)).get()
 }
 
 export async function updateCategory(
