@@ -11,8 +11,7 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen">
-      <section className="relative w-full min-h-[500px] md:min-h-[600px] bg-cover bg-center bg-no-repeat bg-[url('/Hero.png')] flex items-end justify-end p-8 md:p-16">
-        {/* الـ Div ده هو اللي شايل الزراير ومتحكم في مكانهم */}
+      <section className="relative w-full min-h-[500px] md:min-h-[600px] bg-cover bg-center bg-no-repeat bg-[url('/Hero.png')] flex items-end justify-center p-8 md:p-16">
         <div className="flex flex-col sm:flex-row gap-4 mb-10 mr-0 md:mr-10">
           <Button size="lg" className="rounded-full px-8 py-6 text-lg" asChild>
             <Link href="/products" className="flex items-center">
@@ -30,7 +29,7 @@ export default async function HomePage() {
             <Link href="/search">Explore Products</Link>
           </Button>
         </div>
-      </section>  
+      </section>
       {/* Features */}
       <section className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -83,8 +82,8 @@ export default async function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="container mx-auto px-4 py-16">
-        <div className="bg-secondary rounded-3xl p-8 md:p-12 text-center space-y-6">
+      <section className="w-full mx-auto py-16">
+        <div className="bg-secondary p-8 md:p-12 text-center space-y-6">
           <h2 className="font-serif text-3xl md:text-4xl font-bold">
             Start Your Skincare Journey
           </h2>
