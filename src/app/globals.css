@@ -4,22 +4,22 @@
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
+  --card: oklch(0.982 0.0041 91.45);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.7267 0.1689 22.1774);
+  --primary: oklch(0.605 0.1806 358.1);
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.8266 0.0967 19.3324);
+  --secondary: oklch(0.9391 0.0178 53.97);
   --secondary-foreground: oklch(0 0 0);
   --muted: oklch(0.7448 0.1526 21.4142);
   --muted-foreground: oklch(0 0 0);
   --accent: oklch(0.967 0.003 264.542);
-  --accent-foreground: oklch(0.7445 0.155 21.5035);
+  --accent-foreground: oklch(0.5297 0.1757 358.12);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(1 0 0);
   --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
+  --input: oklch(1 0 0);
   --ring: oklch(0.708 0 0);
   --chart-1: oklch(0.81 0.1 252);
   --chart-2: oklch(0.62 0.19 260);

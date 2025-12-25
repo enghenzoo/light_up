@@ -11,34 +11,26 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen">
-      <section className="container mx-auto px-4 py-16 md:py-24">
-        <div className="max-w-3xl mx-auto text-center space-y-6">
-          <h1 className="font-serif text-4xl md:text-6xl font-bold text-balance leading-tight">
-            Light Up ,Light up Your Beauty
-          </h1>
-          <p className="text-lg text-muted-foreground text-pretty">
-            Discover our collection of premium Makeup, skincare products crafted
-            with natural ingredients for your daily beauty ritual
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-            <Button size="lg" className="rounded-full" asChild>
-              <Link href="/products">
-                Shop Now
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="rounded-full bg-transparent"
-              asChild
-            >
-              <Link href="/search">Explore Products</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
+      <section className="relative w-full min-h-[500px] md:min-h-[600px] bg-cover bg-center bg-no-repeat bg-[url('/Hero.png')] flex items-end justify-end p-8 md:p-16">
+        {/* الـ Div ده هو اللي شايل الزراير ومتحكم في مكانهم */}
+        <div className="flex flex-col sm:flex-row gap-4 mb-10 mr-0 md:mr-10">
+          <Button size="lg" className="rounded-full px-8 py-6 text-lg" asChild>
+            <Link href="/products" className="flex items-center">
+              Shop Now
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Link>
+          </Button>
 
+          <Button
+            size="lg"
+            variant="outline"
+            className="rounded-full bg-white/20 backdrop-blur-sm border-white px-8 py-6 text-lg hover:bg-white hover:text-black transition-all"
+            asChild
+          >
+            <Link href="/search">Explore Products</Link>
+          </Button>
+        </div>
+      </section>  
       {/* Features */}
       <section className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
