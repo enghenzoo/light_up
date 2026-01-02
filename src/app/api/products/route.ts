@@ -9,23 +9,26 @@ export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const latest = searchParams.get("latest");
-    const limit = searchParams.get("limit");
-    const offset = searchParams.get("offset");
+    const page = searchParams.get("page");
     const categoryId = searchParams.get("categoryId");
-    const minPrice = searchParams.get("minPrice");
-    const maxPrice = searchParams.get("maxPrice");
+    const search = searchParams.get("search");
+    const limit = 24;
+    let offset = 0
 
+    if (Number(page) > 1) {
+      offset = limit / (Number(page) -1)
+    }
+    console.log(offset, limit, page)
     let data;
 
     if (latest) {
       data = await getLatestProducts();
     } else {
       data = await getAllProducts(
-        limit ? Number(limit) : undefined,
+        limit,
         offset ? Number(offset) : undefined,
         categoryId ? Number(categoryId) : undefined,
-        minPrice ? Number(minPrice) : undefined,
-        maxPrice ? Number(maxPrice) : undefined
+        search ? search : undefined,
       );
     }
     return NextResponse.json(data);
@@ -33,7 +36,7 @@ export async function GET(req: Request) {
     console.error(error);
     return NextResponse.json(
       { error: "Failed to fetch products" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -47,7 +50,7 @@ export async function POST(req: Request) {
     console.error(error);
     return NextResponse.json(
       { error: "Failed to create product" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

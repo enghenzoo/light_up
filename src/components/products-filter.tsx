@@ -1,5 +1,7 @@
 "use client";
+
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import {
   Select,
   SelectContent,
@@ -9,16 +11,17 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Search } from "lucide-react";
 
 export default function ProductsFilter({
   categories,
   searchParams,
-  minPrice,
-  maxPrice,
   categoryId,
+  search,
 }: any) {
   const router = useRouter();
-
+  const [searchParam, setSearchParam] = useState(search || "");
   const updateParams = (key: string, value?: string) => {
     const newSearchParams = new URLSearchParams(Object.entries(searchParams));
     if (value && value !== "all") newSearchParams.set(key, value);
@@ -27,15 +30,19 @@ export default function ProductsFilter({
     router.replace(`?${newSearchParams.toString()}`);
   };
 
+  const handleSearch = () => {
+    updateParams("search", searchParam);
+  };
+
   return (
     <div className="flex flex-col md:flex-row gap-6 mb-8">
-      <div className="flex-1">
+      <div className="flex flex-col gap-2">
         <Label htmlFor="category">Category</Label>
         <Select
           onValueChange={(value) => updateParams("categoryId", value)}
           value={categoryId?.toString() || "all"}
         >
-          <SelectTrigger id="category">
+          <SelectTrigger id="category" className="border-primary/50 border">
             <SelectValue placeholder="Select a category" />
           </SelectTrigger>
           <SelectContent>
@@ -49,24 +56,20 @@ export default function ProductsFilter({
         </Select>
       </div>
 
-      <div className="flex-1">
-        <Label htmlFor="minPrice">Min Price</Label>
-        <Input
-          id="minPrice"
-          type="number"
-          value={minPrice || ""}
-          onChange={(e) => updateParams("minPrice", e.target.value)}
-        />
-      </div>
-
-      <div className="flex-1">
-        <Label htmlFor="maxPrice">Max Price</Label>
-        <Input
-          id="maxPrice"
-          type="number"
-          value={maxPrice || ""}
-          onChange={(e) => updateParams("maxPrice", e.target.value)}
-        />
+      <div className="flex flex-col gap-2 w-full">
+        <Label htmlFor="search">Search</Label>
+        <div className="w-full flex items-center gap-2">
+          <Input
+            id="search"
+            className="border-primary/50"
+            placeholder="Product Name or price"
+            onChange={(event) => setSearchParam(event.target.value)}
+            value={searchParam}
+          />
+          <Button onClick={handleSearch}>
+            <Search />
+          </Button>
+        </div>
       </div>
     </div>
   );

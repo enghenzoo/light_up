@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { products, products_category } from "@/db/schema";
-import { eq, gte, lte } from "drizzle-orm";
+import { eq, and, like, or, sql } from "drizzle-orm";
 
 export async function createProduct(data: typeof products.$inferInsert) {
   return await db.insert(products).values(data).returning();
@@ -10,24 +10,39 @@ export async function getAllProducts(
   limit: number = 10,
   offset: number = 0,
   categoryId?: number,
-  minPrice?: number,
-  maxPrice?: number
+  search?: string,
 ) {
-  let query = db.select().from(products).$dynamic();
+  const conditions: any[] = [];
 
   if (categoryId) {
-    query = query.where(eq(products.categoryId, categoryId));
+    conditions.push(eq(products.categoryId, categoryId));
   }
 
-  if (minPrice) {
-    query = query.where(gte(products.price, minPrice));
+  if (search) {
+    if (!isNaN(Number(search))) {
+      conditions.push(eq(products.price, Number(search)));
+    } else {
+      conditions.push(or(like(products.name, `%${search}%`), like(products.description, `%${search}%`)));
+    }
   }
 
-  if (maxPrice) {
-    query = query.where(lte(products.price, maxPrice));
-  }
+  const productsData = await db
+    .select()
+    .from(products)
+    .where(and(...conditions))
+    .limit(limit)
+    .offset(offset)
+    .all();
 
-  return await query.limit(limit).offset(offset).all();
+  const productCount = await db
+    .select({
+      count: sql<number>`COUNT(*)`
+    })
+    .from(products)
+    .where(and(...conditions))
+    .get()
+
+  return {products:productsData, count: productCount?.count}
 }
 
 export async function getLatestProducts() {
@@ -46,7 +61,7 @@ export async function getLatestProducts() {
 }
 
 export async function getProductBySlug(slug: string) {
-  return await db.select().from(products).where(eq(products.slug, slug));
+  return await db.select().from(products).where(eq(products.slug, slug)).get();
 }
 
 export async function getProductByCategory(category: number) {
@@ -58,7 +73,7 @@ export async function getProductByCategory(category: number) {
 
 export async function updateProduct(
   id: number,
-  data: Partial<typeof products.$inferInsert>
+  data: Partial<typeof products.$inferInsert>,
 ) {
   return await db
     .update(products)

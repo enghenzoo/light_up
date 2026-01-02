@@ -5,48 +5,30 @@ import { headers } from "next/headers";
 import PaginationComponent from "@/components/pagination";
 
 interface ProductsPageProps {
-  searchParams: {
+  searchParams: Promise<{
     page?: string;
-    categoryId?: string;
-    minPrice?: string;
-    maxPrice?: string;
-  };
+ }>;
 }
 
-const PRODUCTS_PER_PAGE = 8;
+const PRODUCTS_PER_PAGE = 24;
 
 export default async function ProductsPage(props: ProductsPageProps) {
-  const { searchParams } = props;
+  const params = await props.searchParams;
   const host = (await headers()).get("host");
   const protocol = process.env.NODE_ENV === "development" ? "http" : "https";
   const baseUrl = `${protocol}://${host}`;
 
-  const currentPage = Number(searchParams.page || 1);
-  const categoryId = searchParams.categoryId
-    ? Number(searchParams.categoryId)
-    : undefined;
-  const minPrice = searchParams.minPrice
-    ? Number(searchParams.minPrice)
-    : undefined;
-  const maxPrice = searchParams.maxPrice
-    ? Number(searchParams.maxPrice)
-    : undefined;
+  const currentPage = Number(params.page || 1);
 
   const queryParams = new URLSearchParams();
-  if (categoryId) queryParams.set("categoryId", categoryId.toString());
-  if (minPrice) queryParams.set("minPrice", minPrice.toString());
-  if (maxPrice) queryParams.set("maxPrice", maxPrice.toString());
-  queryParams.set("limit", PRODUCTS_PER_PAGE.toString());
-  queryParams.set("offset", ((currentPage - 1) * PRODUCTS_PER_PAGE).toString());
+  queryParams.set("page", currentPage.toString())
 
   const res = await fetch(`${baseUrl}/api/products?${queryParams.toString()}`, {
     cache: "no-store",
   });
-  const products = await res.json();
-
-  const categories = await getAllCategories();
-
-  const totalProducts = products.length;
+  const data = await res.json();
+  console.log(data)
+  const totalProducts = data.count;
   const totalPages = Math.ceil(totalProducts / PRODUCTS_PER_PAGE);
 
   return (
@@ -59,16 +41,8 @@ export default async function ProductsPage(props: ProductsPageProps) {
           </p>
         </div>
 
-        <ProductsFilter
-          categories={categories}
-          searchParams={searchParams}
-          minPrice={minPrice}
-          maxPrice={maxPrice}
-          categoryId={categoryId}
-        />
-
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {products.map((product: any) => (
+          {data.products.map((product: any) => (
             <ProductCard key={product.id} {...product} />
           ))}
         </div>
@@ -77,7 +51,7 @@ export default async function ProductsPage(props: ProductsPageProps) {
           totalProducts={totalProducts}
           totalPages={totalPages}
           currentPage={currentPage}
-          searchParams={searchParams}
+          searchParams={params}
         />
       </div>
     </div>

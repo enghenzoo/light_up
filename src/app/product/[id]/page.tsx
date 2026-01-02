@@ -22,8 +22,7 @@ interface Product {
   category: string;
   description: string;
   price: number;
-  size?: string;
-  image: string;
+  imageUrl: string;
   rating: number;
   reviews: number;
   benefits: string[];
@@ -84,7 +83,7 @@ export default function ProductPage() {
       name: product.name,
       price: product.price,
       quantity,
-      image: product.image,
+      image: product.imageUrl,
     });
     router.push("/cart");
   };
@@ -105,7 +104,7 @@ export default function ProductPage() {
           <div className="space-y-4">
             <div className="relative aspect-square rounded-3xl overflow-hidden bg-secondary">
               <Image
-                src={product.image || "/placeholder.svg"}
+                src={product.imageUrl || "/placeholder.svg"}
                 alt={product.name}
                 fill
                 className="object-cover"
@@ -141,11 +140,6 @@ export default function ProductPage() {
               <h1 className="font-serif text-4xl font-bold mb-2">
                 {product.name}
               </h1>
-              {product.size && (
-                <p className="text-sm text-muted-foreground">
-                  Size: {product.size}
-                </p>
-              )}
             </div>
 
             {/* Rating */}
@@ -162,10 +156,6 @@ export default function ProductPage() {
                   />
                 ))}
               </div>
-              <span className="text-sm font-medium">{product.rating}</span>
-              <span className="text-sm text-muted-foreground">
-                ({product.reviews} Reviews)
-              </span>
             </div>
 
             {/* Price */}
